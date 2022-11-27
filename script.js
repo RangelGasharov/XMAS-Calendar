@@ -16,7 +16,7 @@ function createButtons() {
 }
 createButtons()
 
-let currentDate = new Date("2022-12-01")
+let currentDate = new Date("2022-12-20")
 let currentYear = new Date(currentDate).getFullYear()
 let month = 12;
 const startingDate = new Date(`${currentYear}-${month}-01`)
@@ -56,5 +56,58 @@ function closePopUp() {
     backgroundGif.src = ""
 }
 
+const creditDiv = document.createElement("div")
 
 
+const canvas = document.getElementById("canvas");
+canvas.width = wrapper.offsetWidth
+console.log(wrapper.offsetHeight)
+canvas.height = wrapper.offsetHeight
+const ctx = canvas.getContext("2d")
+
+ctx.fillStyle = "#fff";
+class Snowflake {
+    constructor() {
+        this.x = Math.random() * canvas.clientWidth;
+        this.y = Math.random() * canvas.clientHeight;
+        this.radius = Math.random() * 3;
+        this.velocity = this.radius;
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+        ctx.fill();
+        ctx.closePath();
+
+        this.y += this.velocity;
+        if (this.y > canvas.height) {
+            this.x = Math.random() * canvas.clientWidth;
+            this.y = 0;
+        }
+    }
+}
+
+let snowFlakes = [];
+for (let i = 0; i < canvas.width / 3; i++) {
+    snowFlakes.push(new Snowflake())
+}
+
+window.onresize = function () {
+    resizeCanvas();
+}
+
+function resizeCanvas() {
+    canvas.width = wrapper.offsetWidth
+    canvas.height = wrapper.offsetHeight
+    ctx.fillStyle = "#fff";
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    snowFlakes.forEach((snowFlake) => { snowFlake.draw() })
+}
+
+function animation() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    snowFlakes.forEach((snowFlake) => { snowFlake.draw() })
+    requestAnimationFrame(animation)
+}
+animation();

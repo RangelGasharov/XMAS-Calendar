@@ -9,19 +9,38 @@ html {
     height: 100%;
 }
 
+:root {
+    --main-background-color-1: hsla(209, 100%, 78%);
+    --main-background-color-2: rgb(1, 1, 45);
+    --opacity-calendar-fields: 0.7;
+    --number-of-columns: 8;
+    --z-index-popup: 10;
+}
+
 body {
     min-height: 100%;
     padding: 0;
     margin: 0;
-    background-color: rgb(1, 1, 45);
-    background-image: url(./img/Background.gif);
+    background: var(--main-background-color-2);
 }
 
-:root {
-    --main-background-color: 209, 100%, 78%;
-    --opacity-calendar-fields: 0.7;
-    --number-of-columns: 8;
-    --z-index-popup: 10;
+::-webkit-scrollbar {
+    width: 1em;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--main-background-color-2);
+    border-radius: 100vw;
+    margin-block: .5em;
+}
+
+::-webkit-scrollbar-thumb {
+    background: hsla(250, 100%, 5%);
+    border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: hsla(250, 100%, 20%);
 }
 
 .wrapper {
@@ -38,6 +57,8 @@ body {
 }
 
 .calendartitle {
+    display: flex;
+    justify-content: center;
     font-weight: bolder;
     font-size: 3em;
     padding: 1.5em 0;
@@ -48,7 +69,7 @@ body {
     width: 80vw;
     display: grid;
     grid-template-columns: repeat(var(--number-of-columns), 1fr);
-    gap: 2em 1em;
+    gap: 1.5em 1em;
 }
 
 .calendarfield {
@@ -59,7 +80,7 @@ body {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    font-size: 2em;
+    font-size: 2.5em;
     background-color: white;
     text-shadow: .5px .5px .5px black;
     opacity: var(--opacity-calendar-fields);
@@ -88,9 +109,6 @@ body {
     border-radius: 1em;
     z-index: var(--z-index-popup);
     background-color: white;
-    width: 80vw;
-    /*background-position: center;
-    background-repeat: no-repeat;*/
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -131,6 +149,11 @@ body {
     scroll-behavior: smooth;
 }
 
-#gif {
-    width: 100%;
+#canvas {
+    display: block;
+    margin: 0;
+    position: absolute;
+    background-size: cover;
+    z-index: -1;
+    background: var(--main-background-color-2);
 }

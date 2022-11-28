@@ -16,14 +16,17 @@ function createButtons() {
 }
 createButtons()
 
-let currentDate = new Date("2022-12-20")
+
+let currentDate = new Date("2022-12-10")
 let currentYear = new Date(currentDate).getFullYear()
 let month = 12;
 const startingDate = new Date(`${currentYear}-${month}-01`)
 
 const wrapper = document.getElementById("wrapper")
+const calendarTitle = document.getElementById("calendartitle")
 const buttonsOfCalendar = document.querySelectorAll(".calendarfield")
 const popupWindow = document.getElementById("popup")
+
 const overlay = document.getElementById("overlay")
 const closingButton = document.getElementById("close-button")
 
@@ -35,18 +38,26 @@ buttonsOfCalendar.forEach(button => {
 })
 
 closingButton.addEventListener("click", () => {
+    if (popupWindow.classList.contains("credits")) {
+        closeCredits()
+    }
     closePopUp()
 })
-const backgroundGif = document.getElementById("gif")
+
+const backgroundGif = document.createElement("img")
+backgroundGif.id = "gif"
+
 function openPopUp(buttonValue) {
     let openDateOfField = new Date(`${currentYear}-${month}-${buttonValue}`)
     let openDateOfFieldDay = openDateOfField.getDate()
     if ((currentDate >= openDateOfField) && (currentDate >= startingDate)) {
+        popupWindow.appendChild(backgroundGif)
+        backgroundGif.src = `gif/gif_${buttonValue}.gif`
         popupWindow.classList.add("active")
         overlay.classList.add("active")
-        backgroundGif.src = `gif/gif_${buttonValue}.gif`
     } else {
-        alert(`It is not yet the ${openDateOfFieldDay}.${month}.${currentYear}`)
+        let currentButton = document.getElementById(`calendarfield${buttonValue}`)
+        currentButton.classList.add("cannot-open")
     }
 }
 
@@ -54,22 +65,51 @@ function closePopUp() {
     popupWindow.classList.remove("active")
     overlay.classList.remove("active")
     backgroundGif.src = ""
+    if (popupWindow.querySelector("#gif")) {
+        popupWindow.removeChild(backgroundGif)
+    }
 }
 
-const creditDiv = document.createElement("div")
+
+const creditDivButton = document.createElement("button")
+creditDivButton.id = "credits"
+creditDivButton.innerHTML = "Credits"
+const creditsText = document.createElement("div")
+creditsText.classList.add("credits-text")
+creditsText.innerHTML = `<div><strong>Project name:</strong> XMAS-Calendar</div>
+<div><strong>Group name:</strong> Rodel</div>
+<div><strong>Made by:</strong> <ul><li>Rangel Gasharov</li> <li>Santiago Scheffknecht</li> <li>Fabian Argast</li> </ul> </div>`
+calendarTitle.appendChild(creditDivButton)
+
+creditDivButton.addEventListener("click", () => {
+    openCredits();
+})
+
+function openCredits() {
+    popupWindow.classList.add("active")
+    popupWindow.classList.add("credits")
+    popupWindow.append(creditsText)
+    overlay.classList.add("active")
+}
+
+function closeCredits() {
+    popupWindow.classList.remove("credits")
+    popupWindow.removeChild(creditsText)
+}
 
 
 const canvas = document.getElementById("canvas");
 canvas.width = wrapper.offsetWidth
-console.log(wrapper.offsetHeight)
 canvas.height = wrapper.offsetHeight
 const ctx = canvas.getContext("2d")
 
 ctx.fillStyle = "#fff";
 class Snowflake {
     constructor() {
-        this.x = Math.random() * canvas.clientWidth;
+        let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+        this.x = Math.random() * canvas.clientWidth * plusOrMinus;
         this.y = Math.random() * canvas.clientHeight;
+        this.offset = 1;
         this.radius = Math.random() * 3;
         this.velocity = this.radius;
     }
@@ -81,15 +121,17 @@ class Snowflake {
         ctx.closePath();
 
         this.y += this.velocity;
-        if (this.y > canvas.height) {
-            this.x = Math.random() * canvas.clientWidth;
+        this.x += this.offset;
+        if (this.y > canvas.height || this.x > canvas.width) {
+            let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+            this.x = Math.random() * canvas.clientWidth * plusOrMinus;
             this.y = 0;
         }
     }
 }
 
 let snowFlakes = [];
-for (let i = 0; i < canvas.width / 3; i++) {
+for (let i = 0; i < canvas.width / 2; i++) {
     snowFlakes.push(new Snowflake())
 }
 

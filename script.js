@@ -1,26 +1,33 @@
+let currentDate = new Date()
+let currentYear = new Date(currentDate).getFullYear()
+let month = 12;
+const startingDate = new Date(`${currentYear}-${month}-01`)
+const calendarFieldsContainer = document.getElementById("calendarfields")
+
 const fieldWithLightColoredNumber = [1, 3, 4, 5, 6, 8, 13, 15, 16, 19, 20, 24]
 function createButtons() {
-    let calendarFieldsContainer = document.getElementById("calendarfields")
     for (i = 1; i <= 24; i++) {
         const btn = document.createElement("button")
         btn.innerHTML = i
         btn.classList.add("calendarfield", `calendarfield${i}`)
         btn.id = `calendarfield${i}`
         btn.value = i
+        btn.style.backgroundColor = "green"
+        if (i % 2 == 0) {
+            btn.style.backgroundColor = "red"
+        }
         btn.style.backgroundImage = `url(./img/present_${i}.jpg)`
         if (fieldWithLightColoredNumber.includes(i)) {
             btn.style.color = "white"
+        }
+        let openDateOfField = new Date(`${currentYear}-${month}-${btn.value}`)
+        if (currentDate < openDateOfField) {
+            btn.classList.add("cannot-open")
         }
         calendarFieldsContainer.appendChild(btn)
     }
 }
 createButtons()
-
-
-let currentDate = new Date("2022-12-10")
-let currentYear = new Date(currentDate).getFullYear()
-let month = 12;
-const startingDate = new Date(`${currentYear}-${month}-01`)
 
 const wrapper = document.getElementById("wrapper")
 const calendarTitle = document.getElementById("calendartitle")
@@ -49,15 +56,13 @@ backgroundGif.id = "gif"
 
 function openPopUp(buttonValue) {
     let openDateOfField = new Date(`${currentYear}-${month}-${buttonValue}`)
-    let openDateOfFieldDay = openDateOfField.getDate()
-    if ((currentDate >= openDateOfField) && (currentDate >= startingDate)) {
+    if ((currentDate >= openDateOfField)) {
         popupWindow.appendChild(backgroundGif)
         backgroundGif.src = `gif/gif_${buttonValue}.gif`
         popupWindow.classList.add("active")
         overlay.classList.add("active")
     } else {
-        let currentButton = document.getElementById(`calendarfield${buttonValue}`)
-        currentButton.classList.add("cannot-open")
+      
     }
 }
 
@@ -96,7 +101,6 @@ function closeCredits() {
     popupWindow.classList.remove("credits")
     popupWindow.removeChild(creditsText)
 }
-
 
 const canvas = document.getElementById("canvas");
 canvas.width = wrapper.offsetWidth

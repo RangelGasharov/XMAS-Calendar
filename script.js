@@ -1,7 +1,8 @@
 let currentDate = new Date()
+console.log(currentDate)
 let currentYear = new Date(currentDate).getFullYear()
 let month = 12;
-const startingDate = new Date(`${currentYear}-${month}-01`)
+const startingDate = new Date(`${currentYear}/${month}/01`)
 const calendarFieldsContainer = document.getElementById("calendarfields")
 
 const fieldWithLightColoredNumber = [1, 3, 4, 5, 6, 8, 13, 15, 16, 19, 20, 24]
@@ -20,7 +21,7 @@ function createButtons() {
         if (fieldWithLightColoredNumber.includes(i)) {
             btn.style.color = "white"
         }
-        let openDateOfField = new Date(`${currentYear}-${month}-${btn.value}`)
+        let openDateOfField = new Date(`${currentYear}/${month}/${btn.value}`)
         if (currentDate < openDateOfField) {
             btn.classList.add("cannot-open")
         }
@@ -55,7 +56,7 @@ const backgroundGif = document.createElement("img")
 backgroundGif.id = "gif"
 
 function openPopUp(buttonValue) {
-    let openDateOfField = new Date(`${currentYear}-${month}-${buttonValue}`)
+    let openDateOfField = new Date(`${currentYear}/${month}/${buttonValue}`)
     if ((currentDate >= openDateOfField)) {
         popupWindow.appendChild(backgroundGif)
         backgroundGif.src = `gif/gif_${buttonValue}.gif`
